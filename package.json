@@ -11,5 +11,8 @@
   "license": "ISC",
   "devDependencies": {
     "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "big-integer": "^1.6.51"
   }
 }
