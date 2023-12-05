@@ -1,48 +1,61 @@
 const fs = require('fs');
 const path = require('path');
 
-const filePath = path.join(__dirname, 'file1-a.txt');
+const filePath = path.join(__dirname, 'file1.txt');
 const fileStream = fs.createReadStream(filePath);
 
-let numbers = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
 
+
+let numbers = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
 fileStream.on('data', (data) => {
-    let finalArr = [];
-    let sum = 0;
+    let finalArr = []
+    let sum = 0
+    let arr = []
     data.toString().split('\n').forEach((line) => {
-        let firstDigit = null;
-        let lastDigit = null;
+        arr = []
+        let matchesString
+        let matchesNumber
+        let matchesStringIndex
+        let matchesNumberIndex
+        let Nums
         numbers.forEach((value, index) => {
-            let regex = new RegExp("\\b" + value + "\\b", 'g');
-            if (line.match(regex)) {
-                if (firstDigit === null || line.indexOf(value) < line.indexOf(firstDigit)) {
-                    firstDigit = index.toString();
+            matchesString = line.match(value);
+            matchesNumber = line.match(/\d+/g);
+            if (matchesNumber) {
+                Nums = matchesNumber.map(match => match.split('')).flat();
+                if (matchesString) {
+                    console.log(matchesString)
+                    for (let i = 0; i < Nums.length; i++) {
+                        matchesNumberIndex = line.search(Nums[i]);
+                        if (matchesNumberIndex < matchesString.index) {
+                            finalArr.push(Nums[i])
+                            break;
+                        } else {
+                            arr.push(index)
+                        }
+                    }
                 }
-                if (lastDigit === null || line.lastIndexOf(value) > line.lastIndexOf(lastDigit)) {
-                    lastDigit = index.toString();
+                else {
+                    Nums = matchesNumber.map(match => match.split('')).flat();
+                    finalArr.push(Number(Nums[0] + Nums[Nums.length - 1]))
                 }
+            } else if (matchesString) {
+
+                arr.push(index)
             }
-        });
-        let matchesNumber = line.match(/\d+/g);
-        if (matchesNumber) {
-            let Nums = matchesNumber.map(match => match.split('')).flat();
-            if (firstDigit === null || line.search(Nums[0]) < line.indexOf(firstDigit)) {
-                firstDigit = Nums[0];
-            }
-            if (lastDigit === null || line.lastIndexOf(Nums[Nums.length - 1]) > line.lastIndexOf(lastDigit)) {
-                lastDigit = Nums[Nums.length - 1];
-            }
-        }
-        if (firstDigit !== null && lastDigit !== null) {
-            finalArr.push(Number(firstDigit + lastDigit));
-        }
+
+            Nums = []
+        })
+
     });
-    sum = finalArr.reduce((a, b) => a + b, 0);
-    console.log(` ${sum}`);
+    console.log(finalArr)
+    const Lastarr = finalArr.filter(x => !isNaN(x));
+    Lastarr.map((value) => {
+        sum += value
+    })
+    // console.log(Lastarr)
+    console.log(sum)
 });
-
-
-
 
 
 
