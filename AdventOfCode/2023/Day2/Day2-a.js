@@ -15,11 +15,11 @@ fileStream.on('data', (data) => {
         let words = line.split(' ');
         words.forEach((word, wordIndex) => {
             if (word.includes('red')) {
-                redIndices.push({ game: lineIndex + 1, value: words[wordIndex - 1] });
+                redIndices.push({ game: lineIndex + 1, value: parseInt(words[wordIndex - 1]) });
             } else if (word.includes('blue')) {
-                blueIndices.push({ game: lineIndex + 1, value: words[wordIndex - 1] });
+                blueIndices.push({ game: lineIndex + 1, value: parseInt(words[wordIndex - 1]) });
             } else if (word.includes('green')) {
-                greenIndices.push({ game: lineIndex + 1, value: words[wordIndex - 1] });
+                greenIndices.push({ game: lineIndex + 1, value: parseInt(words[wordIndex - 1]) });
             }
         });
     });
